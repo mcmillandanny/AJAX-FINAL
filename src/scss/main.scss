@@ -25,14 +25,31 @@ TABLE OF CONTENTS:
 
 body {
 	background: #ccc;
+	background-image: url(/dist/img/bg.jpg);
+	background-position: 39% 25%;
+	background-repeat: no-repeat;
 	
+}
+
+
+.riot-data {
+	text-align: center;
+	h1 {
+		font-size: 35px;
+		color: yellow;
+	}
+}
+
+
+
+.userResults, .rankResults {
+	text-align: center;
+	font-size: 35px;
+	color: yellow;
+	padding: 5px;
 }
 
 
 
 
 /* 2. Content ================================= */
-
-.name {
-	font-size: 200px;
-}

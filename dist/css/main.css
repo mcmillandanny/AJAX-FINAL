@@ -48,7 +48,7 @@ body {
 	line-height: 1;
 }
 
-ol, ul {
+ol, ul, li {
 	list-style: none;
 }
 
@@ -74,11 +74,27 @@ table {
 
 body {
 	background: #ccc;
+	background-image: url(/dist/img/bg.jpg);
+	background-position: 39% 25%;
+	background-repeat: no-repeat;
+}
+
+.riot-data {
+	text-align: center;
+}
+
+.riot-data h1 {
+	font-size: 35px;
+	color: yellow;
+}
+
+.userResults, .rankResults {
+	text-align: center;
+	font-size: 35px;
+	color: yellow;
+	padding: 5px;
 }
 
 /* 2. Content ================================= */
-.name {
-	font-size: 200px;
-}
 
 /*# sourceMappingURL=main.css.map */

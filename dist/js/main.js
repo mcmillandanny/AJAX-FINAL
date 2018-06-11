@@ -3,59 +3,78 @@
 console.log("AJAX-FINAL");
 // accountID = 32735733
 
-// (function() {
-
 
 var userResultsEl = document.querySelector('.userResults');
+var imgResultsEl = document.querySelector('.imgResults');
 var rankResultsEl = document.querySelector('.rankResults');
 var searchTerm = document.getElementById('summoner-name');
 var srchBtn = document.querySelector('.search-btn');
-var summonerName = searchTerm;
+var clrBtn = document.querySelector('.clear-btn');
 
 srchBtn.addEventListener('click', function (e) {
     e.preventDefault();
     var summonerName = searchTerm.value;
     console.log(summonerName, "summonerName");
     searchStats(summonerName);
-    searchMatches();
-    // searchProfileIcon();
-    // searchChampions();
 });
+
+clrBtn.addEventListener('click', function () {
+    userResultsEl.innerHTML = '';
+    rankResultsEl.innerHTML = '';
+    console.log('clicked');
+});
+
+//   function searchProfileIcon() {
+//     axios.get("http://circuslabs.net/proxies/riotgames-proxy/",{
+
+//         params: {
+//         '_ep':'/lol/static-data/v3/profile-icons/',
+//         'api_key':'RGAPI-c549b0c6-7bd0-446c-b029-57b116a2890c',
+//     }
+
+//          })
+//     .then(function (response) {
+//         console.log('here is the get response data',response.data);
+
+//         let results = response.data.data;
+//         for ( let i in results) {
+//             let result = results[i];
+
+//             let spirteArt = result.image.sprite;
+
+//             let imgEl = document.createElement('img');
+
+//             imgEl.innerHTML = spirteArt;
+//             console.log(imgEl);
+
+//             imgResultsEl.appendChild(imgEl);
+
+//         }
+
+
+//     })
+//     .catch(function (error) {
+//      console.log('axios encountered an error!', error);
+//     }); 
+// }
+
 
 function searchStats(summonerName) {
     axios.get("http://circuslabs.net/proxies/riotgames-proxy/", {
 
         params: {
             '_ep': '/lol/summoner/v3/summoners/by-name/' + summonerName,
-            'api_key': 'RGAPI-1fc325aa-1ea5-41f0-b4ba-80e897fc27c8'
+            'api_key': 'RGAPI-c549b0c6-7bd0-446c-b029-57b116a2890c'
         }
     }).then(function (response) {
-        // console.log('here is the get response data',response);
         console.table(response.data);
 
         var accountId = response.data.accountId;
         var playerId = response.data.id;
+        var profileIconId = response.data.profileIconId;
 
         searchRank(playerId);
-        searchMatches(accountId);
         displayData(response);
-    }).catch(function (error) {
-        console.log('axios encountered an error!', error);
-    });
-}
-
-function searchMatches(accountId) {
-    axios.get("http://circuslabs.net/proxies/riotgames-proxy/", {
-
-        params: {
-            'beginIndex': 0,
-            'endIndex': 10,
-            '_ep': '/lol/match/v3/matchlists/by-account/' + accountId,
-            'api_key': 'RGAPI-1fc325aa-1ea5-41f0-b4ba-80e897fc27c8'
-        }
-    }).then(function (response) {
-        // console.log('here is the get response data',response);
-        console.table(response.data);
     }).catch(function (error) {
         console.log('axios encountered an error!', error);
     });
@@ -66,11 +85,10 @@ function searchRank(playerId) {
 
         params: {
             '_ep': '/lol/league/v3/positions/by-summoner/' + playerId,
-            'api_key': 'RGAPI-1fc325aa-1ea5-41f0-b4ba-80e897fc27c8'
+            'api_key': 'RGAPI-c549b0c6-7bd0-446c-b029-57b116a2890c'
         }
     }).then(function (response) {
-        // console.log('here is the get response data',response);
-        console.table(response.data);
+
         getRankValues(response.data);
     }).catch(function (error) {
         console.log('axios encountered an error!', error);
@@ -80,7 +98,6 @@ function searchRank(playerId) {
 function getRankValues(rankArray) {
 
     for (var i = 0; i <= rankArray.length - 1; i++) {
-        console.log(rankArray[i]);
 
         var wins = rankArray[i].wins;
         var losses = rankArray[i].losses;
@@ -114,6 +131,7 @@ function getRankValues(rankArray) {
 function displayData(response) {
     var profileName = response.data.name;
     var accountLvl = response.data.summonerLevel;
+    var profileImg = response.data;
 
     var pProfileName = document.createElement('p');
     var pAccountLvl = document.createElement('p');
@@ -125,77 +143,5 @@ function displayData(response) {
     userLiEl.appendChild(pProfileName);
     userLiEl.appendChild(pAccountLvl);
     userResultsEl.appendChild(userLiEl);
-
-    // let profileNameText = document.createTextNode(profileName);
-    // let accountLvlText = document.createTextNode(accountLvl);
-
-
-    // pEl.appendChild(profileNameText);
-    // pEl.appendChild(accountLvlText);
-    // resultsEl.appendChild(pEl);
-
 }
-
-// })(); 
-
-
-// rate limit of 10 call per hour
-
-// function searchChampions() {
-//     axios.get("http://circuslabs.net/proxies/riotgames-proxy/",{
-
-//         params: {
-//         'champData':'image',
-//         'tags': 'image',
-//         '_ep':'/lol/static-data/v3/champions/21/',
-//         'api_key':'RGAPI-8a77322e-b580-4e2f-bf05-f54c82228bd1',
-//     },
-//          headers: {
-//             // "Origin": "https://developer.riotgames.com",
-//             // "Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
-//             // "X-Riot-Token": "RGAPI-8a77322e-b580-4e2f-bf05-f54c82228bd1"
-//         }})
-//     .then(function (response) {
-//         console.log('here is the get response data',response);
-//         console.table(response.data);
-//         displayData(response);
-
-//     })
-//     .catch(function (error) {
-//      console.log('axios encountered an error!', error);
-//      //valueEl.value = 'UNDEFINED'
-//     }); 
-// }
-// function searchProfileIcon() {
-//     axios.get("http://circuslabs.net/proxies/riotgames-proxy/",{
-
-//         params: {
-//         '_ep':'/lol/static-data/v3/profile-icons/',
-//         'api_key':'RGAPI-1fc325aa-1ea5-41f0-b4ba-80e897fc27c8',
-//     },
-//          headers: {
-//             // "Origin": "https://developer.riotgames.com",
-//             // "Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
-//             // "X-Riot-Token": "RGAPI-e6a82438-350b-41c0-aefd-18f3e9c2ba54"
-//         }})
-//     .then(function (response) {
-//         // console.log('here is the get response data',response.data);
-//         displayProfileImg(response.data);
-
-
-//     })
-//     .catch(function (error) {
-//      console.log('axios encountered an error!', error);
-//     }); 
-// }
-// function displayProfileImg(imgArray) {
-//     console.log(imgArray)
-//     for (var i = imgArray.length - 1; i >= 0; i++) {
-//         console.log(imgArray[i]);
-//     }
-
-// }
-
-
-//rate limit of 10 calls per hour
 //# sourceMappingURL=main.js.map
